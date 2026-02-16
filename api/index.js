@@ -18,10 +18,10 @@ const supabaseUrl = 'https://rhthfrqbtpqvjtvsvqgs.supabase.co'
     try {
       const { data, error } = await supabase
         .from('rides')
-        .update({ 
-          is_paid: true, 
-          viva_transaction_id: 'FINÁLNÍ-TEST-ÚSPĚCH' 
-        })
+.update({ 
+  is_paid: true, 
+  viva_transaction_id: String(event.EventData?.TransactionId || 'TEST-ID') 
+})
         .eq('viva_order_code', String(orderCode))
         .select()
 
