@@ -5,17 +5,19 @@ export default async function handler(req, res) {
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJodGhmcnFidHBxdmp0dnN2cWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MTY0MDEsImV4cCI6MjA4NjQ5MjQwMX0.JHuIUiZGifcvfI9bFlx6hyT816VxpnI8jrmkknNNWcE'
   const supabase = createClient(supabaseUrl, supabaseKey)
 
-  // 1. DŮLEŽITÉ: Viva Payments Verification (potřebují Status 200 a Key)
+  // 1. UNIVERZÁLNÍ VERIFIKACE PRO VIVU
+  // Viva při ověřování posílá GET nebo POST a chce vidět status 200
   if (req.method === 'GET') {
-    return res.status(200).json({ Key: "Verification success" });
+      // Pokud ti Viva dala nějaký Verification Token, nahraď 'POTVRZENO' tím tokenem
+      return res.status(200).json({ Key: 'POTVRZENO' });
   }
 
   if (req.method === 'POST') {
     const event = req.body
 
-    // Pokud Viva posílá prázdný testovací POST pro ověření
+    // Pokud je to jen ověřovací ping od Vivy (neobsahuje OrderCode)
     if (!event.OrderCode && !event.EventData) {
-      return res.status(200).json({ Key: "Verification success" });
+        return res.status(200).json({ Key: 'POTVRZENO' });
     }
 
     const orderCode = event.OrderCode || event.EventData?.OrderCode
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
         .from('rides')
         .update({ 
           is_paid: true, 
-          viva_transaction_id: String(event.EventData?.TransactionId || 'VIVA-LIVE') 
+          viva_transaction_id: String(event.EventData?.TransactionId || 'VIVA-PAYMENT') 
         })
         .eq('viva_order_code', String(orderCode))
         .select()
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
       if (error) throw error
       return res.status(200).json({ status: "Success" })
     } catch (dbError) {
-      return res.status(500).json({ error: "DB Error" })
+      return res.status(500).json({ error: "Database error" })
     }
   }
 
