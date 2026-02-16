@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 export default async function handler(req, res) {
   // TATO URL MUSÍ BÝT 100% PŘESNĚ ZE SUPABASE SETTINGS -> API
-  const supabaseUrl = 'https://rhthfrqbtpqjtvsvqgs.supabase.co'
+const supabaseUrl = 'https://rhthfrqbtpqvjtvsvqgs.supabase.co'
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJodGhmcnFidHBxdmp0dnN2cWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MTY0MDEsImV4cCI6MjA4NjQ5MjQwMX0.JHuIUiZGifcvfI9bFlx6hyT816VxpnI8jrmkknNNWcE'
   
   const supabase = createClient(supabaseUrl, supabaseKey)
