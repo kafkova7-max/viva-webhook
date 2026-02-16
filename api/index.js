@@ -6,10 +6,8 @@ export default async function handler(req, res) {
   const supabase = createClient(supabaseUrl, supabaseKey)
 
   // 1. UNIVERZÁLNÍ VERIFIKACE PRO VIVU
-  // Viva při ověřování posílá GET nebo POST a chce vidět status 200
   if (req.method === 'GET') {
-      // Pokud ti Viva dala nějaký Verification Token, nahraď 'POTVRZENO' tím tokenem
-      return res.status(200).json({ Key: 'POTVRZENO' });
+      return res.status(200).json({ "Key": "0B57C6C22A47B41688A7261CDD1F95483A545823" });
   }
 
   if (req.method === 'POST') {
@@ -17,7 +15,7 @@ export default async function handler(req, res) {
 
     // Pokud je to jen ověřovací ping od Vivy (neobsahuje OrderCode)
     if (!event.OrderCode && !event.EventData) {
-        return res.status(200).json({ Key: 'POTVRZENO' });
+        return res.status(200).json({ "Key": "0B57C6C22A47B41688A7261CDD1F95483A545823" });
     }
 
     const orderCode = event.OrderCode || event.EventData?.OrderCode
